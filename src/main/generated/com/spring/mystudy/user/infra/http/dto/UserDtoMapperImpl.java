@@ -1,7 +1,10 @@
 package com.spring.mystudy.user.infra.http.dto;
 
 import com.spring.mystudy.user.application.dto.request.UserJoinCommand;
+import com.spring.mystudy.user.application.dto.request.UserLoginCommand;
+import com.spring.mystudy.user.application.dto.request.UserLoginCommand.UserLoginCommandBuilder;
 import com.spring.mystudy.user.infra.http.dto.request.UserJoinDto;
+import com.spring.mystudy.user.infra.http.dto.request.UserLoginDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +13,25 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-06T12:29:22+0900",
+    date = "2024-02-06T14:13:21+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (JetBrains s.r.o.)"
 )
 @Component
 public class UserDtoMapperImpl implements UserDtoMapper {
+
+    @Override
+    public UserLoginCommand toCommand(UserLoginDto userLoginDto) {
+        if ( userLoginDto == null ) {
+            return null;
+        }
+
+        UserLoginCommandBuilder userLoginCommand = UserLoginCommand.builder();
+
+        userLoginCommand.email( userLoginDto.getEmail() );
+        userLoginCommand.password( userLoginDto.getPassword() );
+
+        return userLoginCommand.build();
+    }
 
     @Override
     public UserJoinCommand toCommand(UserJoinDto userJoinDto) {

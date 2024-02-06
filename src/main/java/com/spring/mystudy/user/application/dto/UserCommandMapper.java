@@ -1,5 +1,6 @@
 package com.spring.mystudy.user.application.dto;
 
+import com.spring.mystudy.config.auth.AuthenticatedUserInfo;
 import com.spring.mystudy.user.application.dto.request.UserJoinCommand;
 import com.spring.mystudy.user.domain.User;
 import com.spring.mystudy.user.domain.info.Category;

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,6 +24,16 @@ public class UserJpaRepository implements UserRepository {
     @Override
     public Optional<User> findById(long userId) {
         return Optional.ofNullable(em.find(User.class, userId));
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        List<User> users = em.createQuery("select u from User u" +
+                " where u.email = :email", User.class)
+                .setParameter("email", email)
+                .getResultList();
+
+        return users.stream().findAny();
     }
 
     @Override

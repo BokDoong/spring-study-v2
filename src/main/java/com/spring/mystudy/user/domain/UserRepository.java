@@ -8,5 +8,7 @@ public interface UserRepository {
     void save(User user);
 
     Optional<User> findById(long userId);
+
+    Optional<User> findByEmail(String email);
     Optional<Category> findCategoryById(Long categoryId);
 }
