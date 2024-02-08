@@ -4,7 +4,10 @@ import com.spring.mystudy.common.log.ResponseLogger;
 import com.spring.mystudy.exception.BusinessException;
 import com.spring.mystudy.exception.ErrorResponse;
 import com.spring.mystudy.exception.code.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -82,13 +85,13 @@ public class GlobalExceptionHandler {
         if (e.getClass().equals(MethodArgumentNotValidException.class)) {
             response = ErrorResponse.toResponseEntity(ErrorCode.INVALID_REQUEST_PARAMETER,
                     ((MethodArgumentNotValidException) e).getBindingResult().getFieldErrors().stream()
-                            .map(err -> err.getDefaultMessage()).collect(Collectors.joining(" and ")));
+                            .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(" and ")));
         } else {
             response = ErrorResponse.toResponseEntity(errorCode);
         }
 
         // Logging and Return
-        ResponseLogger.loggingWithExceptionInfo(response, e);
+        ResponseLogger.loggingWithException(response, e);
         return response;
     }
 }

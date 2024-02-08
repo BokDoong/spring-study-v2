@@ -22,6 +22,7 @@ public class CachingRequestFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         // Wrapping
         ContentCachingRequestWrapper wrappingRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappingResponse = new ContentCachingResponseWrapper(response);
@@ -34,4 +35,3 @@ public class CachingRequestFilter extends OncePerRequestFilter {
         return request.getContentType() != null && request.getContentType().startsWith("multipart");
     }
 }
-

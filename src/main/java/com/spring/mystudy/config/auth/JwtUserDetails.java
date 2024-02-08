@@ -11,12 +11,10 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class JwtUserDetails implements UserDetails {
 
-    private long id;
-    private boolean isAuthenticated;
+    private long userId;
 
-    public JwtUserDetails(AuthenticatedUserInfo userInfo) {
-        id = userInfo.getUserId();
-        isAuthenticated = true;
+    public JwtUserDetails(long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -55,6 +53,6 @@ public class JwtUserDetails implements UserDetails {
     }
 
     public long getUserId() {
-        return id;
+        return userId;
     }
 }

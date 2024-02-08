@@ -26,7 +26,7 @@ public class ResponseLogger {
     }
 
     // Failed Response With Exception
-    public static void loggingWithExceptionInfo(ResponseEntity<ErrorResponse> response, Exception ex) {
+    public static void loggingWithException(ResponseEntity<ErrorResponse> response, Exception ex) {
         StringBuilder logBuilder = new StringBuilder();
         logBuilder.append(getLoggingStructure());
         logBuilder.append(getExceptionName(ex)).append(": ").append(parsingExceptionMessage(ex)).append("\n");  // Server에서 확인하는 Exception Response

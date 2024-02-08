@@ -1,7 +1,9 @@
 package com.spring.mystudy.user.infra.http.dto;
 
+import com.spring.mystudy.user.application.dto.request.TokenReissueCommand;
 import com.spring.mystudy.user.application.dto.request.UserJoinCommand;
 import com.spring.mystudy.user.application.dto.request.UserLoginCommand;
+import com.spring.mystudy.user.infra.http.dto.request.TokenReissueDto;
 import com.spring.mystudy.user.infra.http.dto.request.UserJoinDto;
 import com.spring.mystudy.user.infra.http.dto.request.UserLoginDto;
 import org.mapstruct.Mapper;
@@ -13,4 +15,6 @@ public interface UserDtoMapper {
 
     UserLoginCommand toCommand(UserLoginDto userLoginDto);
     UserJoinCommand toCommand(UserJoinDto userJoinDto);
+
+    TokenReissueCommand toCommand(TokenReissueDto tokenReissueDto);
 }

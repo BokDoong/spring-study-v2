@@ -1,8 +1,10 @@
 package com.spring.mystudy.user.infra.http.dto;
 
+import com.spring.mystudy.user.application.dto.request.TokenReissueCommand;
 import com.spring.mystudy.user.application.dto.request.UserJoinCommand;
 import com.spring.mystudy.user.application.dto.request.UserLoginCommand;
 import com.spring.mystudy.user.application.dto.request.UserLoginCommand.UserLoginCommandBuilder;
+import com.spring.mystudy.user.infra.http.dto.request.TokenReissueDto;
 import com.spring.mystudy.user.infra.http.dto.request.UserJoinDto;
 import com.spring.mystudy.user.infra.http.dto.request.UserLoginDto;
 import java.time.LocalDateTime;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-06T14:13:21+0900",
+    date = "2024-02-08T21:41:18+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (JetBrains s.r.o.)"
 )
 @Component
@@ -67,5 +69,22 @@ public class UserDtoMapperImpl implements UserDtoMapper {
         UserJoinCommand userJoinCommand = new UserJoinCommand( name, nickname, email, password, phoneNumber, genderId, categoryIds, firstAddress, secondAddress, birthDate );
 
         return userJoinCommand;
+    }
+
+    @Override
+    public TokenReissueCommand toCommand(TokenReissueDto tokenReissueDto) {
+        if ( tokenReissueDto == null ) {
+            return null;
+        }
+
+        String accessToken = null;
+        String refreshToken = null;
+
+        accessToken = tokenReissueDto.getAccessToken();
+        refreshToken = tokenReissueDto.getRefreshToken();
+
+        TokenReissueCommand tokenReissueCommand = new TokenReissueCommand( accessToken, refreshToken );
+
+        return tokenReissueCommand;
     }
 }

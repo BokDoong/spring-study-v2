@@ -1,8 +1,6 @@
 package com.spring.mystudy.user.domain;
 
 import com.spring.mystudy.common.basetime.BaseTimeEntity;
-import com.spring.mystudy.config.PasswordEncoderConfig;
-import com.spring.mystudy.config.WebSecurityConfig;
 import com.spring.mystudy.store.domain.location.Address;
 import com.spring.mystudy.store.domain.review.Review;
 import com.spring.mystudy.user.domain.info.UserPrefer;
@@ -13,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.spring.mystudy.config.PasswordEncoderConfig.*;
+import static com.spring.mystudy.config.auth.PasswordEncoderConfig.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
