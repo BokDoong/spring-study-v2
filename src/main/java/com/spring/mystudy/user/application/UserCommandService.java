@@ -9,6 +9,7 @@ import com.spring.mystudy.user.domain.UserRepository;
 import com.spring.mystudy.user.domain.info.Category;
 import com.spring.mystudy.user.domain.info.UserPrefer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,12 @@ public class UserCommandService {
         addUserPrefersToUserAndCategories(user, foodCategories, userPrefers);
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public User saveOAuthUser(User user) {
+        userRepository.save(user);
+        return user;
     }
 
     private void addUserPrefersToUserAndCategories(User user, List<Category> foodCategories, List<UserPrefer> userPrefers) {

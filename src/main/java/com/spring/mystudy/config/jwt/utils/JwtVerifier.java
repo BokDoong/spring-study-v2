@@ -10,7 +10,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ import java.util.Optional;
 
 import static com.spring.mystudy.config.jwt.JwtException.*;
 
-@Slf4j
 @Component
 public class JwtVerifier {
 
@@ -57,6 +55,10 @@ public class JwtVerifier {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.TOKEN_NOT_FOUND));
         if(!storedRefreshToken.equals(refreshToken))
             throw new NotFoundException(ErrorCode.TOKEN_NOT_FOUND);
+    }
+
+    public void expireRefreshToken(long userId) {
+        redisTemplate.delete(String.valueOf(userId));
     }
 
     private Optional<String> findRefreshToken(long userId) {

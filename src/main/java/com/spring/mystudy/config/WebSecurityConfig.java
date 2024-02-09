@@ -1,10 +1,16 @@
 package com.spring.mystudy.config;
 
 import com.spring.mystudy.config.jwt.*;
+import com.spring.mystudy.config.jwt.factory.JwtFactory;
 import com.spring.mystudy.config.jwt.handler.JwtAccessDeniedHandler;
 import com.spring.mystudy.config.jwt.handler.JwtAuthenticationEntryPoint;
 import com.spring.mystudy.config.jwt.utils.JwtExtractor;
 import com.spring.mystudy.config.jwt.utils.JwtVerifier;
+import com.spring.mystudy.config.oauth2.OAuthFailureHandler;
+import com.spring.mystudy.config.oauth2.OAuthSuccessHandler;
+import com.spring.mystudy.config.oauth2.OAuthLoader;
+import com.spring.mystudy.user.application.UserCommandService;
+import com.spring.mystudy.user.application.UserQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,17 +26,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    private final CorsConfig corsConfig;
+    private final OAuthLoader oAuthLoader;
+    private final UserQueryService userQueryService;
+    private final UserCommandService userCommandService;
     private final JwtExtractor jwtExtractor;
     private final JwtVerifier jwtVerifier;
+    private final JwtFactory jwtFactory;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAccessDeniedHandler accessDeniedHandler;
 
-    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/users/**"};
+    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/users/**", "/oauth2/**", "/", "/favicon.ico"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF, CORS
-        http.cors(AbstractHttpConfigurer::disable);
+        http.addFilter(corsConfig.getCorsFilter());
         http.csrf(AbstractHttpConfigurer::disable);
 
         // STATELESS 설정
@@ -41,19 +52,23 @@ public class WebSecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
 
+        // 권한 규칙 설정
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(AUTH_WHITELIST).permitAll()
+                .anyRequest().authenticated());
+
         // JwtAuthFilter 추가
         http.addFilterBefore(new JwtAuthFilter(jwtExtractor, jwtVerifier), UsernamePasswordAuthenticationFilter.class);
-
         http.exceptionHandling((exceptionHandling) -> exceptionHandling
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
         );
 
-        // 권한 규칙 설정
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(AUTH_WHITELIST).permitAll()
-                // @PreAuthorization -> 어노테이션으로 메서드마다 설정 -> 이때는 .permitAll()
-                .anyRequest().authenticated());
+        // oauth
+        http.oauth2Login(oauth2 -> oauth2
+                .successHandler(new OAuthSuccessHandler(jwtFactory, userQueryService, userCommandService))
+                .failureHandler(new OAuthFailureHandler())
+                .userInfoEndpoint(userInfo -> userInfo.userService(oAuthLoader)));
 
         return http.build();
     }

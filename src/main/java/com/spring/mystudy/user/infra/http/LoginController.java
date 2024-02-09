@@ -1,5 +1,6 @@
 package com.spring.mystudy.user.infra.http;
 
+import com.spring.mystudy.config.auth.JwtUserDetails;
 import com.spring.mystudy.user.application.LoginService;
 import com.spring.mystudy.user.infra.http.dto.UserDtoMapper;
 import com.spring.mystudy.user.infra.http.dto.request.TokenReissueDto;
@@ -7,10 +8,8 @@ import com.spring.mystudy.user.infra.http.dto.request.UserLoginDto;
 import com.spring.mystudy.user.infra.http.dto.response.TokenResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +27,10 @@ public class LoginController {
     @PostMapping("/reissue")
     public TokenResponse reissue(@Valid @RequestBody TokenReissueDto tokenReissueDto) {
         return loginService.reissue(mapper.toCommand(tokenReissueDto));
+    }
+
+    @PostMapping("/logout")
+    public void logout(@AuthenticationPrincipal JwtUserDetails userDetails) {
+        loginService.logout(userDetails.getUserId());
     }
 }
