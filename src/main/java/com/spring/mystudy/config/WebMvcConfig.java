@@ -1,6 +1,6 @@
 package com.spring.mystudy.config;
 
-import com.spring.mystudy.common.log.LoggingInterceptor;
+import com.spring.mystudy.common.interceptor.LoggingInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

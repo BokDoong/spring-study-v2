@@ -1,4 +1,4 @@
-package com.spring.mystudy.common;
+package com.spring.mystudy.common.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

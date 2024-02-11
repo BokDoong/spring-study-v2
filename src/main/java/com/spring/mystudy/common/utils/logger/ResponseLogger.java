@@ -1,4 +1,4 @@
-package com.spring.mystudy.common.log;
+package com.spring.mystudy.common.utils.logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.mystudy.config.jwt.JwtException;

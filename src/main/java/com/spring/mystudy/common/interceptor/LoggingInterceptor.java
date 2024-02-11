@@ -1,5 +1,7 @@
-package com.spring.mystudy.common.log;
+package com.spring.mystudy.common.interceptor;
 
+import com.spring.mystudy.common.utils.logger.RequestLogger;
+import com.spring.mystudy.common.utils.logger.ResponseLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

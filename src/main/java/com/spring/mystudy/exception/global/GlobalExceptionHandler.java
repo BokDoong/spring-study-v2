@@ -1,11 +1,9 @@
 package com.spring.mystudy.exception.global;
 
-import com.spring.mystudy.common.log.ResponseLogger;
+import com.spring.mystudy.common.utils.logger.ResponseLogger;
 import com.spring.mystudy.exception.BusinessException;
 import com.spring.mystudy.exception.ErrorResponse;
 import com.spring.mystudy.exception.code.ErrorCode;
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;

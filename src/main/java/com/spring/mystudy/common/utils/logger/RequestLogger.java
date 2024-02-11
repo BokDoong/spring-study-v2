@@ -1,4 +1,4 @@
-package com.spring.mystudy.common.log;
+package com.spring.mystudy.common.utils.logger;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;

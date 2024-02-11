@@ -1,6 +1,6 @@
 package com.spring.mystudy.config.jwt.handler;
 
-import com.spring.mystudy.common.log.ResponseLogger;
+import com.spring.mystudy.common.utils.logger.ResponseLogger;
 import com.spring.mystudy.config.jwt.JwtException;
 import com.spring.mystudy.exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
