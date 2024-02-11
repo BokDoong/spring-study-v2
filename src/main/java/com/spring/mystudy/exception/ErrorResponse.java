@@ -1,6 +1,7 @@
 package com.spring.mystudy.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.spring.mystudy.config.jwt.JwtException;
 import com.spring.mystudy.exception.code.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,17 @@ public class ErrorResponse {
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
                         .detail(message)
+                        .build());
+    }
+
+    public static ResponseEntity<ErrorResponse> toResponseEntity(JwtException jwtException) {
+        return ResponseEntity
+                .status(jwtException.getStatus())
+                .body(ErrorResponse.builder()
+                        .status(jwtException.getStatus().value())
+                        .error(jwtException.getStatus().name())
+                        .code(jwtException.getCode())
+                        .message(jwtException.getMessage())
                         .build());
     }
 

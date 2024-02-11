@@ -27,9 +27,9 @@ public class StoreController {
     }
 
     @PostMapping("/{storeId}/reviews")
-    public String review(@PathVariable("storeId") long storeId, @RequestBody @Valid ReviewCreateDto reviewCreateDto
+    public ReviewCreateDto review(@PathVariable("storeId") long storeId, @RequestBody @Valid ReviewCreateDto reviewCreateDto
             , @AuthenticationPrincipal JwtUserDetails userDetails) {
         storeCommandService.review(userDetails.getUserId(), storeId, storeDtoMapper.toCommand(reviewCreateDto));
-        return "성공";
+        return reviewCreateDto;
     }
 }

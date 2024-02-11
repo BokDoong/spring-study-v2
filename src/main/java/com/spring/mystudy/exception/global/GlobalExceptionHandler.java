@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
         }
 
         // Logging and Return
-        ResponseLogger.loggingWithException(response, e);
+        ResponseLogger.loggingWithExceptionInfo(response, e);
         return response;
     }
 }

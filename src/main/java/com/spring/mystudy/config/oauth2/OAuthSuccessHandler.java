@@ -24,7 +24,6 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtFactory jwtFactory;
     private final UserQueryService userQueryService;
     private final UserCommandService userCommandService;
-    private boolean isNewUser = false;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -35,30 +34,33 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         // email 로 회원 찾기 -> 없으면 저장
         Optional<User> optionalUser = findUser(email);
-        redirect(request, response, optionalUser.orElseGet(() -> createUser(oAuth2User)));
+        if (optionalUser.isPresent()) {
+            redirect(request, response, optionalUser.get(), false);
+        } else {
+            redirect(request, response, createAndSaveUser(oAuth2User), true);
+        }
     }
 
     private User createAndSaveUser(OAuth2User oAuth2User) {
         User user = createUser(oAuth2User);
-        isNewUser = true;
         return userCommandService.saveOAuthUser(user);
     }
 
-    private void redirect (HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
+    private void redirect (HttpServletRequest request, HttpServletResponse response, User user, boolean isNewUser) throws IOException {
         String accessToken = jwtFactory.createAccessToken(user.getId());
         String refreshToken = jwtFactory.createRefreshToken(user.getId());
-        String uri = createRedirectionURI(accessToken, refreshToken, user.getId()).toString();
+        String uri = createRedirectionURI(accessToken, refreshToken, user.getId(), isNewUser).toString();
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
-    private URI createRedirectionURI(String accessToken, String refreshToken, Long userId) {
+    private URI createRedirectionURI(String accessToken, String refreshToken, Long userId, boolean isNewUser) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("user_id", String.valueOf(userId));
         queryParams.add("access_token", accessToken);
         queryParams.add("refresh_token", refreshToken);
         queryParams.add("isNewUser", String.valueOf(isNewUser));
 
-        // http://localhost:3000/loginSuccess
+        //13.124.86.122
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
@@ -73,7 +75,6 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                 .name(oAuth2User.getAttribute("name"))
                 .email(oAuth2User.getAttribute("email"))
                 .imgUrl(oAuth2User.getAttribute("imageUrl"))
-                .genderId(2)
                 .build();
     }
 

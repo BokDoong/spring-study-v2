@@ -51,7 +51,6 @@ public class Store extends BaseTimeEntity {
         this.category = category;
         this.region = region;
         images = new Images();
-        reviews = new ArrayList<>();
     }
 
     public void addReview(Review review) {

@@ -65,12 +65,9 @@ public class User extends BaseTimeEntity {
         this.userGender = toGender(genderId);
         this.birthDate = birthDate;
         address = new Address(firstAddress, secondAddress);
-        userImage = imgUrl.isBlank() ? new UserImage() : new UserImage(imgUrl);
+        userImage = imgUrl == null || imgUrl.isBlank() ? new UserImage() : new UserImage(imgUrl);
         point = 0;
         role = Role.USER;
-        userMissions = new ArrayList<>();
-        userPrefers = new ArrayList<>();
-        reviews = new ArrayList<>();
     }
 
     @Getter

@@ -1,7 +1,7 @@
 package com.spring.mystudy.config.jwt.handler;
 
-import com.spring.mystudy.config.jwt.JwtException;
-import jakarta.servlet.ServletException;
+import com.spring.mystudy.common.log.ResponseLogger;
+import com.spring.mystudy.exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import static com.spring.mystudy.config.jwt.JwtException.*;
+
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        // request 에 담긴 JWT Exception 받아서 + Response 응답 설정
-        JwtException.setResponse(response, JwtException.ACCESS_DENIED);
-        // Logging
+                       AccessDeniedException accessDeniedException) throws IOException {
+        ACCESS_DENIED.setResponse(response);
+        ResponseLogger.loggingWithJWTExceptionInfo(ErrorResponse.toResponseEntity(ACCESS_DENIED), ACCESS_DENIED);
     }
 }

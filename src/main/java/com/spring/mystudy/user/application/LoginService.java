@@ -35,11 +35,8 @@ public class LoginService {
 
     @Transactional
     public TokenResponse reissue(TokenReissueCommand tokenReissueCommand) {
-        // 토큰 -> user's id
         Long userId = jwtExtractor.getUserId(tokenReissueCommand.accessToken());
-        // 리프레쉬 토큰 검증
         jwtVerifier.verifyRefreshToken(userId, tokenReissueCommand.refreshToken());
-        // 토큰 재발급
         return toTokenResponse(userId);
     }
 

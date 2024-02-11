@@ -36,7 +36,8 @@ public class WebSecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAccessDeniedHandler accessDeniedHandler;
 
-    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/users/**", "/oauth2/**", "/", "/favicon.ico"};
+    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/login", "/oauth2/**", "/", "/favicon.ico", "/api/v1/users"};
+    private static final String[] AUTH_BLACKLIST = {"/api/v1/stores**"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,8 +55,10 @@ public class WebSecurityConfig {
 
         // 권한 규칙 설정
         http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(AUTH_BLACKLIST).authenticated()
                 .requestMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated());
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().permitAll());
 
         // JwtAuthFilter 추가
         http.addFilterBefore(new JwtAuthFilter(jwtExtractor, jwtVerifier), UsernamePasswordAuthenticationFilter.class);

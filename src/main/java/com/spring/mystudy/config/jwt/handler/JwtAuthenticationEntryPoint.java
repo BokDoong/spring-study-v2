@@ -1,7 +1,8 @@
 package com.spring.mystudy.config.jwt.handler;
 
+import com.spring.mystudy.common.log.ResponseLogger;
 import com.spring.mystudy.config.jwt.JwtException;
-import jakarta.servlet.ServletException;
+import com.spring.mystudy.exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,10 @@ import java.io.IOException;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
-        // request 에 담긴 JWT Exception 받아서 + Response 응답 설정
-        JwtException.setResponse(response, getJwtException(request));
-        // Logging
+                         AuthenticationException authException) throws IOException {
+        JwtException exception = getJwtException(request);
+        exception.setResponse(response);
+        ResponseLogger.loggingWithJWTExceptionInfo(ErrorResponse.toResponseEntity(exception), exception);
     }
 
     private JwtException getJwtException(HttpServletRequest request) {
